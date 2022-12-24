@@ -7,7 +7,7 @@ ProductRouter.use(authentication);
 ProductRouter.post('/', authorization.admin, productController.add);
 ProductRouter.get('/', productController.getAll);
 ProductRouter.get('/:id', productController.getById);
-ProductRouter.put('/', productController.update);
-ProductRouter.delete('/', productController.delById);
+ProductRouter.put('/:id', productController.update);
+ProductRouter.delete('/:id', productController.delById);
 
 module.exports = ProductRouter;

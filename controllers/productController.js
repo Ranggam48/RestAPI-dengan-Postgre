@@ -64,6 +64,10 @@ const getById = async(req, res) => {
             },
         });
 
+        if(!product){
+            return res.status(400).json({message:"Product tidak ditemukan"});
+        }
+
         return res.status(200).json({
             message: `Berhasil mendapatkan Product dengan ID: ${req.params.id}.`,
             data: product
@@ -77,25 +81,25 @@ const getById = async(req, res) => {
 
 const update = async(req, res) => {
     try {
-        const product = await Product.update({
+
+        const id = req.params.id
+        let product = await  Product.findByPk(id);
+
+        if(!product){
+            return res.status(400).json({message:"Product tidak ditemukan"});
+        }
+        const newProduct = {
             name: req.body.name,
             prize: req.body.prize,
             stock: req.body.stock
-        },{
-            where: {
-                id: req.body.id
-            },
-        });
+        }
 
-        const updateProduct = await Product.findOne({
-            where: {
-                id: req.body.id
-            },
-        })
+        product = await product.update(newProduct)
+
         return res.status(200).json({
-            message: `Berhasil merubah Product dengan ID : ${req.body.id}`,
+            message: `Berhasil merubah Product dengan ID : ${req.params.id}`,
             data: [
-                updateProduct
+                product
             ]
         })
 
@@ -108,14 +112,19 @@ const update = async(req, res) => {
 
 const delById = async(req, res) => {
     try {
-        const product = await Product.destroy({
-            where: {
-                id: req.body.id
-            }
-        })
+
+        const id = req.params.id;
+
+        const product = await Product.findByPk(id);
+
+        if(!product){
+            return res.status(400).json({message:"Product tidak ditemukan"});
+        }
+
+        await product.destroy();
 
         return res.status(200).json({
-            message: `Berhasil menghapus Product dengan ID: ${req.body.id}.`
+            message: `Berhasil menghapus Product dengan ID: ${id}.`
         })
     } catch (error) {
         return res
