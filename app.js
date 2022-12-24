@@ -7,6 +7,7 @@ const app = express();
 
 const productRoutes = require('./routes/productRoutes');
 const costumerRoutes = require('./routes/customerRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 
 app.use(express.json());
@@ -20,6 +21,7 @@ app.get('/', (req, res) => res.send('Server Running'));
 
 app.use('/product', productRoutes);
 app.use('/customer', costumerRoutes)
+app.use('/admin', adminRoutes);
 
 
 app.listen(process.env.PORT,() => {

@@ -1,24 +1,25 @@
 const { User } = require('../models');
 const { validateText } = require('../helpers/bcrypt');
-const { encode } = require("../helpers/jwt");
+const { encode } = require('../helpers/jwt');
 
 const register = async(req, res) => {
     console.log(req.body);
     try {
-        const customer = {
+        const admin = {
             name: req.body.name,
             username: req.body.username,
             email: req.body.email,
             password: req.body.password,
-            isAdmin: false,
+            isAdmin: true,
             noPhone: req.body.noPhone
-        }
+        };
 
-        await User.create(customer);
+        await User.create(admin);
 
         return res.status(200).json({
             message:`Berhasil melakukan register dengan Username: ${req.body.username}.`
-        })
+        });      
+
     } catch (error) {
         return res
         .status(error.status||500)
@@ -29,20 +30,20 @@ const register = async(req, res) => {
 const login = async(req, res) => {
     console.log(req.body);
     try {
-        const customer = await User.findOne({
+        const admin = await User.findOne({
             attributs: ['id', 'name', 'email'],
             where: {
                 email: req.body.email
             }
         });
 
-        if(!customer){
+        if(!admin){
             return res.status(401).json({
                 message: `eamil atau password salah.`
             })
         };
 
-        const checkPass = validateText(req.body.password, customer.password);
+        const checkPass = validateText(req.body.password, admin.password);
 
         if(!checkPass){
             return res.status(401).json({
@@ -54,10 +55,10 @@ const login = async(req, res) => {
             status: 200,
             message: 'Berhasil login',
             token: encode({
-              id: customer.id,
-              name: customer.name,
-              email: customer.email,
-              isAdmin: customer.isAdmin
+              id: admin.id,
+              name: admin.name,
+              email: admin.email,
+              isAdmin: admin.isAdmin
             })
           });
     } catch (error) {
@@ -65,7 +66,8 @@ const login = async(req, res) => {
         .status(error.status||500)
         .json({message: error.message || 'internal server error'});
     }
-}
+};
+
 
 module.exports = {
     register,

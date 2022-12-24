@@ -34,8 +34,8 @@ const add = async(req, res) => {
         });
     } catch (error) {
         return res
-        .status(err.status||500)
-        .json({message: err.message || 'internal server error'});
+        .status(error.status||500)
+        .json({message: error.message || 'internal server error'});
     }
 };
 
