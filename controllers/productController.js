@@ -19,7 +19,6 @@ const add = async(req, res) => {
                 message: "Parameter stock tidak boleh kosong"
             });
         }
-        console.log(req.body);
 
         const newItem = {
             name: req.body.name,

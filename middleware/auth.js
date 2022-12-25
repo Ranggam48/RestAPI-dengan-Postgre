@@ -10,7 +10,6 @@ const authentication = (req, res, next) => {
 
     try {
         req.user = decode(req.headers.authorization);
-        console.log(req.user);
         
     } catch (error) {
         return res
