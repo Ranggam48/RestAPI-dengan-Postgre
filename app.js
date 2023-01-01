@@ -30,3 +30,4 @@ app.listen(process.env.PORT,() => {
     console.log('<<<< SERVER RUNNING ON PORT', process.env.PORT);
 });
 
+module.exports = app;
